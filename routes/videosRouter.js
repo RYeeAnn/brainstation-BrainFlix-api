@@ -5,6 +5,23 @@ const videos = './data/videos.json';
 const { v4: uuid } = require("uuid");
 
 
+router.post("/comments", (req, res) => {
+    const { comment } = req.body;
+
+    const videosJSON = fs.readFileSync('./data/videos.json');
+    const videosARRAY = JSON.parse(videosJSON);
+
+    const newComment = {
+        id: uuid(),
+        ...comment
+    };
+
+    videosARRAY.unshift(newComment);
+
+    fs.writeFileSync('./data/videos.json', JSON.stringify(videosARRAY));
+
+    res.send(newComment);
+});
 
 
 
@@ -38,12 +55,6 @@ router.post("/", (req, res) => {
 
 
 
-
-
-
-
-
-
 router.get("/:id", (req, res) => {
     const videoId = req.params.id;
 
@@ -54,12 +65,6 @@ router.get("/:id", (req, res) => {
 
     res.json(video);
 });
-
-
-
-
-
-
 
 
 
